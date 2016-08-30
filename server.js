@@ -25,6 +25,17 @@ app.get('/characters', function(req,res){
 
 });
 
+app.get('/series/:name', function(req, res){
+
+	marvel.series.findByTitle(req.params.name, function(err, results){
+		if(err){
+			return res.sendStatus(err);
+		}
+		res.json(results)
+	});
+  	
+});
+
 app.get('/character/:id', function(req,res){
 	// instead of calling API, call the database based on req.params.id
 	marvel.characters.find(req.params.id,function(err, results) {

@@ -133,10 +133,11 @@ a {
 	width: 50%;
 	height: 125px;
 	margin: 0 auto;
+	white-space: nowrap;
 }
 
 .border {
-	margin: 5px 0; 
+	margin: -5px 0; 
 	display: block;
     border: none;
     color: white;
@@ -145,15 +146,19 @@ a {
     background: -webkit-gradient(radial, 50% 50%, 0, 50% 50%, 350, from(#fff), to(#000));
 }
 
-.characterName, .seriesName {
+.seriesName, .characterName {
 	letter-spacing: 5px;
-	font-size: 30px;
+	font-size: 40px;
 	color: white;
 	text-shadow: 5px 5px black;
 	margin: 0;
-	position: relative;
-	bottom: 10px;
 	display: inline-block;
+	bottom: 30px;
+	position: relative
+}
+
+h1.characterName {
+	font-size: 3rem;
 }
 
 .progress {
@@ -216,9 +221,7 @@ a {
 .characterList {
 	width: 100%;
 	height: 100px;
-	position: fixed;
 	background-color: black;
-	bottom: 0;
 	border: 1px solid black;
 	text-align: center;
 
