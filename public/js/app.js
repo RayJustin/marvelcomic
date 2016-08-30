@@ -1,24 +1,42 @@
 $(document).ready(function(){
 
-	var key = '7b1368749ecac0e51e4b8178535068a5'
-
 	$.ajax({
 		dataType: 'json',
-		url: 'http://gateway.marvel.com:80/v1/public/characters?orderBy=name&apikey='+ key,
+		url: '/characters',
 		success: function(data) {
-			console.log(data);
+			// console.log(data)
 			var html = "";
-			for(var i = 0; i < data.data.results.length; i++){
-				var char = data.data.results[i];
+			for(var i = 0; i < data.data.length; i++){
+				var char = data.data[i];
 				if(char.series.items.length && char.thumbnail.extension){
 				
 				var series = char.series.items[0].resourceURI;
-				html += "<div class='character' style='background-image: url(\""+char.thumbnail.path + "." + char.thumbnail.extension+ "\")' data-series='"+series+"'><span>"+char.name+"</span></div>";
+				html += '<a href="/character/'+char.id+'">'+
+							'<div class="character" style="background-image: url(\''+char.thumbnail.path+ '.' + char.thumbnail.extension + '\')">'+
+						'</div>'+
+						'</a>';
 			}
 				
 			}
-			$('.characters').html(html);
+			$('.characterCont').html(html);
 		}
+	});
+
+	$('.characterCont').on('click','a',function(e){
+		e.preventDefault();
+		var char = $(this).attr('href');
+		$('.characterCont').hide();
+
+		$.ajax({
+			dataType: 'json',
+			url: char,
+			success: function(data){
+				console.log(data);
+				$('.characterName').text(data.data[0].name);
+			}
+		});
+
+		$('.characterDetail').show();
 	});
 
 });

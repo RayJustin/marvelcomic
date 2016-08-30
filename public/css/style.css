@@ -125,6 +125,10 @@ a {
 	margin: 0 auto;
 }
 
+.characterDetail {
+	display: none;
+}
+
 .characterInfo {
 	width: 50%;
 	height: 125px;
