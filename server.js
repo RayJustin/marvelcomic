@@ -13,7 +13,7 @@ var marvel = api.createClient({
 
 app.use(express.static('public'));
 
-app.get('/characters', function(req,res){
+app.get('/characters', function(req, res){
 
 	marvel.characters.findAll(function(err, results) {
 	  if (err) {
@@ -22,27 +22,45 @@ app.get('/characters', function(req,res){
 	 // loop over results to see if they are in the database, if not add them
 	  res.json(results);
 	});
-
 });
 
-app.get('/series/:name', function(req, res){
-
-	marvel.series.findByTitle(req.params.name, function(err, results){
-		if(err){
-			return res.sendStatus(err);
-		}
-		res.json(results)
-	});
-  	
-});
-
-app.get('/character/:id', function(req,res){
+app.get('/character/id/:id', function(req, res){
 	// instead of calling API, call the database based on req.params.id
 	marvel.characters.find(req.params.id,function(err, results) {
 	  if (err) {
 	    return res.sendStatus(err);
 	  }
-	 
+	  res.json(results);
+	});
+});
+
+app.get('/series/:name', function(req, res){
+	
+	marvel.series.findByTitle(req.params.name, function(err, results){
+		if(err){
+			return res.sendStatus(err);
+		}
+		res.json(results);
+	});
+  	
+});
+
+app.get('/series/id/:id', function(req, res){
+
+	marvel.series.find(req.params.id, function(err, results){
+		if(err){
+			return res.sendStatus(err);
+		}
+		res.json(results);
+	});
+});
+
+app.get('/comic/:id', function(req, res){
+	
+	marvel.comics.find(req.params.id, function(err, results) {
+	  if (err) {
+	    return res.sendStatus(err);
+	  }
 	  res.json(results);
 	});
 });
