@@ -6,12 +6,10 @@ $(document).ready(function(){
 		url: '/characters',
 		success: function(data) {
 			var html = "";
-			for(var i = 0; i < data.data.length; i++){
-				var char = data.data[i];
-				if(char.series.items.length && char.thumbnail.extension){
-					html += '<a href="/character/id/'+char.id+'">'+
-							'<div class="character" style="background-image: url(\''+char.thumbnail.path+ '.' + char.thumbnail.extension + '\')">'+'</div>'+'</a>';
-				}
+			for(var i = 0; i < data.length; i++){
+				var char = data[i];
+			
+					html += '<a href="/character/id/'+ char.charID +'"><div class="character" style="background-image: url('+ char.thumbnail +')"></div></a>';
 			}
 			$('.characterCont').html(html);
 		}
@@ -40,6 +38,7 @@ $(document).ready(function(){
 						url: '/series/' + title[0],
 						success: function(data) {
 							var char = data.data[0];
+
 							html = '<div class="seriesCont"><a href="/series/id/'+ char.id +'"><div class="series" style="background-image: url('+ char.thumbnail.path + '.' + char.thumbnail.extension +')"></div><span class="progress">Progress: 0/10</span><div class="meter"><span style="width: 0%"></span></div></a></div>"';
 							$('.seriesSection').append(html);
 						}
@@ -76,9 +75,8 @@ $(document).ready(function(){
 							url: '/comic/'+ val,
 							success: function(data){
 								var char = data.data[0];
-								console.log(data);
 
-								var html = '<a href="/comic/ '+ char.id +'"><div class="comic" style="background-image: url('+ char.thumbnail.path +'.'+ char.thumbnail.extension +')"></div></a>';
+								var html = '<div class="comicWrapper"><a href="/comic/ '+ char.id +'"><div class="comic" style="background-image: url('+ char.thumbnail.path +'.'+ char.thumbnail.extension +')"></div></a><input type="checkbox" id="cb'+ index +'" name="cb'+ index +'"><label for="cb'+ index +'">Read</label></div>';
 								$('.comicCont').append(html);
 							}
 						});
@@ -90,5 +88,11 @@ $(document).ready(function(){
 
 
 });
+
+// Check boxes need to change the border color //
+$('')
+
+
+
 
 

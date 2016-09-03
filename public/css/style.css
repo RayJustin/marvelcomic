@@ -7,6 +7,37 @@ ul {
 	margin: 0;
 }
 
+label {
+	color: white;
+	font-size: 25px;
+	text-shadow: 5px 5px black;
+}
+
+input[type=checkbox] {
+	display: none;
+}
+
+input[type=checkbox] + label:before {
+    content: "";  
+    display: inline-block;  
+    width: 15px;  
+    height: 15px;  
+    vertical-align:middle;
+    margin-right: 8px;  
+    background-color: #aaa;  
+    box-shadow: inset 0px 2px 2px rgba(0, 0, 0, .3);
+    border-radius: 4px;  
+}
+
+input[type=checkbox]:checked + label:before {
+    content:"\2714"; /* Tick */
+    color:white;
+    background-color: #666; 
+    text-align:center;
+    line-height:15px;
+    text-shadow:0px 0px 3px #eee;
+}
+
 li {
 	list-style: none;
 }
@@ -16,11 +47,14 @@ a {
 	color: white;
 }
 
+html {
+	height: 100%;
+}
+
 body {
 	height: 100%;
-	background-image: url('../images/background.jpg');
+	background: linear-gradient( rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5) ), url('../images/background.jpg');
 	background-size: cover;
-	background-repeat: repeat;
 }
 
 /*----Header-Styles----*/
@@ -65,7 +99,7 @@ body {
 	text-align: center;
 }
 
-.character, .characterHead , .series, .comic, .footerCharacter, .seriesSm {
+.character, .characterHead , .series, .footerCharacter, .seriesSm {
 	background-color: black;
 	background-size: cover;
 	display: inline-block;
@@ -94,7 +128,16 @@ a {
 	border: 3px solid yellow;
 }
 
-.comic, .seriesSm {
+.comic {
+	height: 150px;
+	width: 100px;
+	background-size: cover;
+	display: inline-block;
+	background-color: black;
+	border: 3px solid white;
+}
+
+.seriesSm {
 	height: 150px;
 	width: 100px;
 	background-size: cover;
@@ -202,6 +245,13 @@ h1.characterName {
 	margin: 20px 0;
 }
 
+.comicWrapper {
+	height: 200px;
+	width: 100px;
+	display: inline-block;
+	margin: 10px 15px;
+}
+
 .comicContainer {
 	float: left;
 	display: inline-block;
@@ -216,6 +266,29 @@ h1.characterName {
 	background-color: black;
 	background-size: cover;
 	border: 3px solid white;
+}
+
+.checked {
+	border: 1px solid green;
+}
+
+.uncheckBox {
+	background-image: url('images/unchecked.ico');
+	background-size: cover;
+	width: 10px;
+	height: 10px;
+}
+
+.checkBox {
+	background-image: url('images/checked.ico');
+	background-size: cover;
+	width: 10px;
+	height: 10px;
+}
+
+.read {
+	color: white;
+	font-size: 15px;
 }
 
 /*----Footer-Styles----*/
