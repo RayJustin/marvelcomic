@@ -9,7 +9,7 @@ $(document).ready(function(){
 			for(var i = 0; i < data.length; i++){
 				var char = data[i];
 			
-					html += '<a href="/character/id/'+ char.charID +'"><div class="character" style="background-image: url('+ char.thumbnail +')"></div></a>';
+					html += '<a href="/character/'+ char.charID +'"><div class="character" style="background-image: url('+ char.thumbnail +')"></div></a>';
 			}
 			$('.characterCont').html(html);
 		}
@@ -19,27 +19,25 @@ $(document).ready(function(){
 	$('.characterCont').on('click','a',function(e){
 		e.preventDefault();
 		var href = $(this).attr('href');
+
 		$('.characterCont').hide();
 
 		$.ajax({
 			dataType: 'json',
 			url: href,
 			success: function(data){
-				var series = data.data[0].series.items;
-				$('.characterName').text(data.data[0].name);
-				$('.characterHead').css('background-image', 'url(\''+data.data[0].thumbnail.path+ '.' + data.data[0].thumbnail.extension + '\')');
-
-				$.each(series, function(index, value){
-					var title = value.name.split(" (");
+				$('.characterName').text(data[0].name);
+				$('.characterHead').css('background-image', 'url('+data[0].thumbnail +')');
+				
+				$.each(data[0].series, function(index, value){
 					var html = "";
-
 					$.ajax({
 						dataType: 'json',
-						url: '/series/' + title[0],
+						url: '/series/' + value,
 						success: function(data) {
-							var char = data.data[0];
+							var series = data.data[0];
 
-							html = '<div class="seriesCont"><a href="/series/id/'+ char.id +'"><div class="series" style="background-image: url('+ char.thumbnail.path + '.' + char.thumbnail.extension +')"></div><span class="progress">Progress: 0/10</span><div class="meter"><span style="width: 0%"></span></div></a></div>"';
+							html = '<div class="seriesCont"><a href="/series/'+ series.id +'"><div class="series" style="background-image: url('+ series.thumbnail.path + '.' + series.thumbnail.extension +')"><span>'+ series.title +'</span></div><span class="progress">Progress: 0/10</span><div class="meter"><span style="width: 0%"></span></div></a></div>"';
 							$('.seriesSection').append(html);
 						}
 					});
@@ -52,31 +50,31 @@ $(document).ready(function(){
 	// AJAX call to get COMICS //
 	$('.seriesSection').on('click', 'a', function(e){
 		e.preventDefault();
-		var char = $(this).attr('href');
+		var series = $(this).attr('href');
 		$('.characterDetail').hide();
 		var html = "";
 
 		$.ajax({
 			dataType: 'json',
-			url: char,
+			url: series,
 			success: function(data){
-				var char = data.data[0];
-				var title = char.title.split(" (");
-				var comic = char.comics.items;
+				var series = data.data[0];
+				var title = series.title.split(" (");
+				var comic = series.comics.items;
 				$('.seriesName').text(title[0]);
-				$('.seriesSm').css('background-image', 'url(\''+char.thumbnail.path+ '.' + char.thumbnail.extension + '\')');
+				$('.seriesSm').css('background-image', 'url(\''+series.thumbnail.path+ '.' + series.thumbnail.extension + '\')');
 
 				$.each(comic, function(index, value){
-					var id = value.resourceURI.split("/");
-					var val = id[id.length - 1];
+					var id = value.resourceURI.split("series/");
+					var val = id[1];
 
 						$.ajax({
 							dataType: 'json',
 							url: '/comic/'+ val,
 							success: function(data){
-								var char = data.data[0];
+								var comic = data.data[0];
 
-								var html = '<div class="comicWrapper"><a href="/comic/ '+ char.id +'"><div class="comic" style="background-image: url('+ char.thumbnail.path +'.'+ char.thumbnail.extension +')"></div></a><input type="checkbox" id="cb'+ index +'" name="cb'+ index +'"><label for="cb'+ index +'">Read</label></div>';
+								var html = '<div class="comicWrapper"><a href="/comic/'+ comic.id +'"><div class="comic" style="background-image: url('+ comic.thumbnail.path +'.'+ comic.thumbnail.extension +')"></div></a><input type="checkbox" id="cb'+ index +'" name="cb'+ index +'"><label for="cb'+ index +'">Read</label></div>';
 								$('.comicCont').append(html);
 							}
 						});
@@ -86,11 +84,35 @@ $(document).ready(function(){
 		$('.seriesDetail').show();
 	});
 
+	$('.comicCont').on('click', 'a', function(e){
+		e.preventDefault();
+		$('.seriesDetail').hide();
+		comic = $(this).attr('href');
+		var html = "";
+		var detail = "";
+		$.ajax({
+			dataType: 'json',
+			url: comic,
+			success: function(data) {
+				console.log(data);
+				var comic = data.data[0];
+				html = '<div class="comicLrg" style="background-image: url('+ comic.thumbnail.path +'.'+ comic.thumbnail.extension +')"></div>'
+				$('.comicContainer').append(html);
+				detail = '<li>Title: '+ comic.title +'</li><li>Issue: '+ comic.issueNumber +'</li><li>UPC: '+ comic.upc +'</li><li>Price: '+ comic.price +'</li>';
+				$('.comicDetail').append(detail);
+			}
+		});
+		$('.comicOverview').show();
+	});
+
+	// Check boxes need to change the border color //
+	$('.comicWrapper').on('click', 'label', function(){
+		$(this).toggleClass('checked');
+	});
 
 });
 
-// Check boxes need to change the border color //
-$('')
+
 
 
 
