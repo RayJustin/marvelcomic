@@ -10,10 +10,14 @@
   "author": "Justin Ray",
   "license": "ISC",
   "dependencies": {
+    "bcryptjs": "^2.3.0",
     "body-parser": "^1.15.2",
     "express": "^4.14.0",
     "marvel-api": "^1.0.0",
     "mongoose": "^4.5.9",
+    "passport": "^0.3.2",
+    "passport-http": "^0.3.0",
+    "passport-local": "^1.0.0",
     "q": "^1.4.1",
     "request": "^2.74.0",
     "unirest": "^0.5.1"

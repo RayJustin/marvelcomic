@@ -35,6 +35,7 @@ $(document).ready(function(){
 						dataType: 'json',
 						url: '/series/' + value,
 						success: function(data) {
+							console.log(data);
 							var series = data.data[0];
 
 							html = '<div class="seriesCont"><a href="/series/'+ series.id +'"><div class="series" style="background-image: url('+ series.thumbnail.path + '.' + series.thumbnail.extension +')"><span>'+ series.title +'</span></div><span class="progress">Progress: 0/10</span><div class="meter"><span style="width: 0%"></span></div></a></div>"';
