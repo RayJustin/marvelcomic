@@ -41,7 +41,7 @@ app.get('/character/:id', function(req, res){
 		if(err){
 			return err;
 		}
-		
+
 		res.json(data);
 	});
 });
@@ -54,7 +54,6 @@ app.get('/series/:id', function(req, res){
 			return err;
 		}
 		var id = data.seriesID;
-		console.log(data);
 
 		if(id === undefined){
 			marvel.series.find(req.params.id, function(err, results){
@@ -73,6 +72,12 @@ app.get('/series/:id', function(req, res){
 					thumbnail: results.data[0].thumbnail.path + '.' + results.data[0].thumbnail.extension,
 					numOfComics: results.data[0].comics.available,
 					comics: comicList,
+				},function(err, series){
+					if(err){
+						return res.status(500).json({
+							message: 'Error'+ err
+						});
+					}
 				});
 
 				res.json(results);
@@ -87,7 +92,7 @@ app.get('/series/:id', function(req, res){
 });
 
 app.get('/comic/:id', function(req, res){
-	
+
 	marvel.comics.find(req.params.id, function(err, results) {
 	  if (err) {
 	    return res.sendStatus(err);

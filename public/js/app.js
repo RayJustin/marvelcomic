@@ -28,7 +28,7 @@ $(document).ready(function(){
 			success: function(data){
 				$('.characterName').text(data[0].name);
 				$('.characterHead').css('background-image', 'url('+data[0].thumbnail +')');
-				
+
 				$.each(data[0].series, function(index, value){
 					var html = "";
 					$.ajax({
@@ -65,8 +65,8 @@ $(document).ready(function(){
 				$('.seriesSm').css('background-image', 'url(\''+series.thumbnail.path+ '.' + series.thumbnail.extension + '\')');
 
 				$.each(comic, function(index, value){
-					var id = value.resourceURI.split("series/");
-					var val = id[1];
+					var series = value.resourceURI.split("series/");
+					var val = series[1];
 
 						$.ajax({
 							dataType: 'json',
@@ -96,7 +96,8 @@ $(document).ready(function(){
 			success: function(data) {
 				console.log(data);
 				var comic = data.data[0];
-				html = '<div class="comicLrg" style="background-image: url('+ comic.thumbnail.path +'.'+ comic.thumbnail.extension +')"></div>'
+				html = '<div class="comicLrg" style="background-image: url('+ comic.thumbnail.path +'.'+ comic.thumbnail.extension +')"></div>';
+
 				$('.comicContainer').append(html);
 				detail = '<li>Title: '+ comic.title +'</li><li>Issue: '+ comic.issueNumber +'</li><li>UPC: '+ comic.upc +'</li><li>Price: '+ comic.price +'</li>';
 				$('.comicDetail').append(detail);
