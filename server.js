@@ -16,10 +16,10 @@ mongoose.connection.on('error', function(err){
 });
 
 // Mongoose Models
-var Character = require('./public/models/character');
-var Series = require('./public/models/series');
-var Comic = require('./public/models/comic');
-var User = require('./public/models/user');
+var Character = require('./models/character');
+var Series = require('./models/series');
+var Comic = require('./models/comic');
+var User = require('./models/user');
 
 var app = express();
 var server = http.Server(app);
@@ -42,6 +42,7 @@ app.get('/characters', function(req, res){
 	});
 });
 
+// How is this going to work when pushed to Heroku??
 app.get('/characters/:offset', function(req, res){
 	var offset = req.params.offset * 20;
 	marvel.characters.findAll(20,offset,function(err, results) {
@@ -89,8 +90,7 @@ app.get('/character/:id', function(req, res){
 });
 
 app.get('/series/:id', function(req, res){
-	// Look for series in database by SeriesID, not by MongooseID. 
-	// If not found, execute API call.
+
 	Series.find({seriesID: req.params.id}, function(err, data){
 		if(err){
 			return err;
@@ -137,12 +137,43 @@ app.get('/series/:id', function(req, res){
 
 app.get('/comic/:id', function(req, res){
 
-	marvel.comics.find(req.params.id, function(err, results) {
-	  if (err) {
-	    return res.sendStatus(err);
-	  }
-	  res.json(results);
+	Comic.find({comicID: req.params.id}, function(err, data){
+		if(err){
+			return err;
+		}
+
+		if(typeof data[0] === "undefined"){
+
+			marvel.comics.find(req.params.id, function(err, results) {
+		  		if (err) {
+		   		 return res.sendStatus(err);
+		  		}
+		  		var id = results.data[0].resourceURI.split("series/");
+		  		var data = [];
+		  		data[0] = {
+		  			name: results.data[0].title,
+						comicID: results.data[0].id,
+						series: id[1],
+						thumbnail: results.data[0].thumbnail.path + '.' + results.data[0].thumbnail.extension
+		  		}
+
+		  		Comic.create(data[0],function(err, comic){
+						if(err){
+							return res.status(500).json({
+								message: 'Error'+ err
+							});
+						}
+					});
+		  		res.json(data[0]);
+			});
+		}
+		else{
+			res.json(data[0])
+		}	
 	});
+
+
+	
 });
 
 app.post('/users', jsonParser, function(req,res){
@@ -225,9 +256,7 @@ app.post('/users', jsonParser, function(req,res){
             	return res.status(201).json({});
             });
     	});
-    });
-
-    
+    });   
 });
 
 var strategy = new LocalStrategy({

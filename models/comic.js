@@ -6,7 +6,8 @@ var ComicSchema = new mongoose.Schema({
 	thumbnail: String,
 	series: Number,
 	updated: {type: Date, default: Date.now},
-	show: {type: String, default: 'Yes'}
+	show: {type: String, default: 'Yes'},
+	read: {type: String, default: 'No'}
 });
 
 var Comic = mongoose.model('Comic', ComicSchema);

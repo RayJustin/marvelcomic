@@ -11,6 +11,7 @@ label {
 	color: white;
 	font-size: 25px;
 	text-shadow: 5px 5px black;
+	letter-spacing: 2px;
 }
 
 input[type=checkbox] {
@@ -20,8 +21,8 @@ input[type=checkbox] {
 input[type=checkbox] + label:before {
     content: "";  
     display: inline-block;  
-    width: 15px;  
-    height: 15px;  
+    width: 20px;  
+    height: 20px;  
     vertical-align:middle;
     margin-right: 8px;  
     background-color: #aaa;  
@@ -135,6 +136,18 @@ a {
     text-align: center;
     background-color: rgba(0,0,0,0.8);
     padding: 10px;
+    letter-spacing: 2px;
+}
+
+.comic > span {
+	display: inline-block;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    text-align: center;
+    background-color: rgba(0,0,0,0.8);
+    padding: 10px;
 }
 
 .series:hover, .comic:hover, .character:hover {
@@ -142,12 +155,14 @@ a {
 }
 
 .comic {
-	height: 150px;
-	width: 100px;
+	height: 225px;
+	width: 150px;
 	background-size: cover;
 	display: inline-block;
 	background-color: black;
 	border: 3px solid white;
+	position: relative;
+	margin: 10px;
 }
 
 .seriesSm {
@@ -260,8 +275,8 @@ h1.characterName {
 }
 
 .comicWrapper {
-	height: 200px;
-	width: 100px;
+	height: 275px;
+	width: 180px;
 	display: inline-block;
 	margin: 10px 15px;
 }
@@ -271,15 +286,17 @@ h1.characterName {
 	display: inline-block;
 	position: relative;
 	left: 200px;
+	margin: 50px auto;
+	text-align: center;
 }
 
 .comicLrg {
 	height: 350px;
 	width: 225px;
-	margin: 50px auto;
 	background-color: black;
 	background-size: cover;
 	border: 3px solid white;
+	margin: 10px 0;
 }
 
 .checked {
@@ -300,11 +317,9 @@ h1.characterName {
 	height: 10px;
 }
 
-.read {
-	color: white;
-	font-size: 15px;
+.check {
+	font-size: 30px;
 }
-
 /*----Footer-Styles----*/
 
 .characterList {

@@ -31,14 +31,15 @@ $(document).ready(function(){
 
 				$.each(data[0].series, function(index, value){
 					var html = "";
+
 					$.ajax({
 						dataType: 'json',
 						url: '/series/' + value,
-						success: function(data) {
-							console.log(data);
-							var series = data.data[0];
 
-							html = '<div class="seriesCont"><a href="/series/'+ series.id +'"><div class="series" style="background-image: url('+ series.thumbnail.path + '.' + series.thumbnail.extension +')"><span>'+ series.title +'</span></div><span class="progress">Progress: 0/10</span><div class="meter"><span style="width: 0%"></span></div></a></div>"';
+						success: function(data) {
+							var series = data[0];
+
+							html = '<div class="seriesCont"><a href="/series/'+ data.seriesID +'"><div class="series" style="background-image: url('+ data.thumbnail +')"><span>'+ data.name +'</span></div><span class="progress">Progress: 0/10</span><div class="meter"><span style="width: 0%"></span></div></a></div>"';
 							$('.seriesSection').append(html);
 						}
 					});
@@ -59,23 +60,21 @@ $(document).ready(function(){
 			dataType: 'json',
 			url: series,
 			success: function(data){
-				var series = data.data[0];
-				var title = series.title.split(" (");
-				var comic = series.comics.items;
+
+				var title = data.name.split(" (");
+				var comic = data.comics;
 				$('.seriesName').text(title[0]);
-				$('.seriesSm').css('background-image', 'url(\''+series.thumbnail.path+ '.' + series.thumbnail.extension + '\')');
+				$('.seriesSm').css('background-image', 'url('+ data.thumbnail +')');
 
 				$.each(comic, function(index, value){
-					var series = value.resourceURI.split("series/");
-					var val = series[1];
 
+					// AJAX call to get a single COMIC //
 						$.ajax({
 							dataType: 'json',
-							url: '/comic/'+ val,
+							url: '/comic/'+ value,
 							success: function(data){
-								var comic = data.data[0];
 
-								var html = '<div class="comicWrapper"><a href="/comic/'+ comic.id +'"><div class="comic" style="background-image: url('+ comic.thumbnail.path +'.'+ comic.thumbnail.extension +')"></div></a><input type="checkbox" id="cb'+ index +'" name="cb'+ index +'"><label for="cb'+ index +'">Read</label></div>';
+								var html = '<div class="comicWrapper"><a href="/comic/'+ data.comicID +'"><div class="comic" style="background-image: url('+ data.thumbnail +')"><span>'+ data.name +'</span></div></a><input type="checkbox" id="cb'+ index +'" name="cb'+ index +'"><label for="cb'+ index +'">Read</label></input></div>';
 								$('.comicCont').append(html);
 							}
 						});
@@ -91,16 +90,16 @@ $(document).ready(function(){
 		comic = $(this).attr('href');
 		var html = "";
 		var detail = "";
+
 		$.ajax({
 			dataType: 'json',
 			url: comic,
 			success: function(data) {
-				console.log(data);
-				var comic = data.data[0];
-				html = '<div class="comicLrg" style="background-image: url('+ comic.thumbnail.path +'.'+ comic.thumbnail.extension +')"></div>';
 
+				html = '<div class="comicLrg" style="background-image: url('+ data.thumbnail +')"></div><input type="checkbox" id="cb" name="cb"><label id="check" for="cb">Read</label></input>';
 				$('.comicContainer').append(html);
-				detail = '<li>Title: '+ comic.title +'</li><li>Issue: '+ comic.issueNumber +'</li><li>UPC: '+ comic.upc +'</li><li>Price: '+ comic.price +'</li>';
+
+				detail = '<li>Title: '+ data.title +'</li><li>Issue: '+ data.issueNumber +'</li><li>UPC: '+ data.upc +'</li><li>Price: '+ data.price +'</li>';
 				$('.comicDetail').append(detail);
 			}
 		});
