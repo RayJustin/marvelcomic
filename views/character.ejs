@@ -1,0 +1,13 @@
+<% include includes/header %>
+
+<section class="characterCont">
+	<% for(var i = 0; i < characters.length; i++) { %>
+		<a href='/character/<%= characters.charID %>'>
+			<div class="character" style="background-image: url('<%= characters.thumbnail %>')">
+			<%= characters.charID %>
+			</div>
+		</a>
+	<% } %>
+</section>
+
+<% include includes/footer %>

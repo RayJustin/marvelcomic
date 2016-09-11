@@ -1,19 +1,19 @@
 $(document).ready(function(){
 
 	// AJAX call to get CHARACTERS //
-	$.ajax({
-		dataType: 'json',
-		url: '/characters',
-		success: function(data) {
-			var html = "";
-			for(var i = 0; i < data.length; i++){
-				var char = data[i];
+	// $.ajax({
+	// 	dataType: 'json',
+	// 	url: '/characters',
+	// 	success: function(data) {
+	// 		var html = "";
+	// 		for(var i = 0; i < data.length; i++){
+	// 			var char = data[i];
 			
-					html += '<a href="/character/'+ char.charID +'"><div class="character" style="background-image: url('+ char.thumbnail +')"></div></a>';
-			}
-			$('.characterCont').html(html);
-		}
-	});
+	// 				html += '<a href="/character/'+ char.charID +'"><div class="character" style="background-image: url('+ char.thumbnail +')"></div></a>';
+	// 		}
+	// 		$('.characterCont').html(html);
+	// 	}
+	// });
 
 	// AJAX call to get SERIES //
 	$('.characterCont').on('click','a',function(e){
