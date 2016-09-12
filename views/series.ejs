@@ -1,14 +1,34 @@
 <% include includes/header %>
 
-<section class="characterDetail">
+
 	<section class="characterInfo">
-		<div class="characterHead"></div>
-		<h1 class="characterName"></h1>
+		<div class="characterHead" style="background-image: url(' <%= character.thumbnail %> ')"></div>
+		<h1 class="characterName">
+			<%= character.name %>
+		</h1>
 		<span class="border"></span>
 	</section>
 	<section class="seriesSection">
-		<!--Append-Series-Here-->
+		<% for(var i = 0; i < series.length; i++) { %>
+			<div class="seriesCont">
+				<a href="/series/<%= series[i].seriesID %>">
+					<div class="series" style="background-image: url(' <%= series[i].thumbnail %> ')">
+						<span> 
+							<%= series[i].name %> 
+						</span>
+					</div>
+						<span class="progress">
+							Progress: 0/10
+						</span>
+					<div class="meter">
+						<span style="width: 0%">
+							<!-- Width Changes To Increase Progress Bar-->
+						</span>
+					</div>
+				</a>
+			</div>
+		<% } %>
 	</section>
-</section>
+
 
 <% include includes/footer %>

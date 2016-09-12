@@ -2,10 +2,17 @@
 
 <section class="comicOverview">
 	<div class="comicContainer">
-		<!--Append-Comic-Here-->
+		<div class="comicLrg" style="background-image: url(' <%= comic.thumbnail %> ')">
+			
+		</div>
+		<input type="checkbox" id="cb" name="cb">
+			<label id="check" for="cb">
+				Read
+			</label>
+		</input>
 	</div>
 	<div class="comicDesc">
-		<h1>Description</h1>
+		<h1> <%= comic.name %> </h1>
 		<ul class="comicDetail"></ul>
 	</div>
 </section>

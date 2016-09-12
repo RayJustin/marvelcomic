@@ -6,8 +6,11 @@ var mongoose = require('mongoose');
 var bcrypt = require('bcryptjs');
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
+var flash = require('connect-flash');
 
 var jsonParser = bodyParser.json();
+
+require('./config/passport')(passport);
 
 mongoose.connect('mongodb://localhost/marvel');
 
@@ -29,8 +32,9 @@ var marvel = api.createClient({
   privateKey: '298af9ed6d48e71b8224e7e53f68b335f2587274'
 });
 
-app.use(express.static('public'));
 require('./app/routes.js')(app, passport);
+
+app.use(express.static('public'));
 
 app.get('/characters', function(req, res){
 
@@ -79,245 +83,149 @@ app.get('/characters', function(req, res){
 // 	});
 // });
 
-// app.get('/character/:id', function(req, res){
-// 	// instead of calling API, call the database based on req.params.id
-// 	Character.find({charID: req.params.id}, function(err, data){
-// 		if(err){
-// 			return err;
-// 		}
-
-// 		res.json(data);
-// 	});
-// });
-
-// app.get('/series/:id', function(req, res){
-
-// 	Series.find({seriesID: req.params.id}, function(err, data){
-// 		if(err){
-// 			return err;
-// 		}
-
-// 		if(typeof data[0] === "undefined"){
-// 			marvel.series.find(req.params.id, function(err, results){
-// 				if(err){
-// 					return res.sendStatus(err);
-// 				}
-// 				var comicList = [];
-// 				for (var j = 0; j < results.data[0].comics.items.length; j++) {
-// 			  		var comicid = results.data[0].comics.items[j].resourceURI.split('comics/');
-// 			  		comicList.push(comicid[1]);
-// 		  		}
-
-// 		  		var data = [];
-// 		  		data[0] = {
-// 		  			name: results.data[0].title,
-// 					seriesID: results.data[0].id,
-// 					thumbnail: results.data[0].thumbnail.path + '.' + results.data[0].thumbnail.extension,
-// 					numOfComics: results.data[0].comics.available,
-// 					comics: comicList,
-// 		  		}
-
-// 				Series.create(data[0],function(err, series){
-// 					if(err){
-// 						return res.status(500).json({
-// 							message: 'Error'+ err
-// 						});
-// 					}
-// 				});
-
-// 				res.json(data[0]);
-// 			});
-// 		}
-// 		else{
-// 			res.json(data[0]);
-// 		}
-// 	});
 
 
-// });
+app.post('/users', jsonParser, function(req,res){
+	if(!req.body){
+		return res.status(400).json({
+			message: 'No request body'
+		});
+	}
 
-// app.get('/comic/:id', function(req, res){
+	if (!('username' in req.body)){
+		return res.status(422).json({
+			message: 'Missing field: username'
+		});
+	}
 
-// 	Comic.find({comicID: req.params.id}, function(err, data){
-// 		if(err){
-// 			return err;
-// 		}
+	var username = req.body.username;
 
-// 		if(typeof data[0] === "undefined"){
+	if(typeof username !== 'string'){
+		return res.status(422).json({
+			message: 'Incorrect field type: username'
+		});
+	}
 
-// 			marvel.comics.find(req.params.id, function(err, results) {
-// 		  		if (err) {
-// 		   		 return res.sendStatus(err);
-// 		  		}
-// 		  		var id = results.data[0].resourceURI.split("series/");
-// 		  		var data = [];
-// 		  		data[0] = {
-// 		  			name: results.data[0].title,
-// 						comicID: results.data[0].id,
-// 						series: id[1],
-// 						thumbnail: results.data[0].thumbnail.path + '.' + results.data[0].thumbnail.extension
-// 		  		}
+	username = username.trim();
 
-// 		  		Comic.create(data[0],function(err, comic){
-// 						if(err){
-// 							return res.status(500).json({
-// 								message: 'Error'+ err
-// 							});
-// 						}
-// 					});
-// 		  		res.json(data[0]);
-// 			});
-// 		}
-// 		else{
-// 			res.json(data[0])
-// 		}	
-// 	});
+	 if (username === '') {
+        return res.status(422).json({
+            message: 'Incorrect field length: username'
+        });
+    }
 
+    if (!('password' in req.body)) {
+        return res.status(422).json({
+            message: 'Missing field: password'
+        });
+    }
 
-	
-// });
+    var password = req.body.password;
 
-// app.post('/users', jsonParser, function(req,res){
-// 	if(!req.body){
-// 		return res.status(400).json({
-// 			message: 'No request body'
-// 		});
-// 	}
+    if (typeof password !== 'string') {
+        return res.status(422).json({
+            message: 'Incorrect field type: password'
+        });
+    }
 
-// 	if (!('username' in req.body)){
-// 		return res.status(422).json({
-// 			message: 'Missing field: username'
-// 		});
-// 	}
+    password = password.trim();
 
-// 	var username = req.body.username;
+    if (password === '') {
+        return res.status(422).json({
+            message: 'Incorrect field length: password'
+        });
+    }
 
-// 	if(typeof username !== 'string'){
-// 		return res.status(422).json({
-// 			message: 'Incorrect field type: username'
-// 		});
-// 	}
+    bcrypt.genSalt(10, function(err, salt){
+    	if(err){
+    		return res.status(500).json({
+    			message: 'Internal Server error'
+    		});
+    	}
 
-// 	username = username.trim();
+    	bcrypt.hash(password, salt, function(err, hash){
+    		if (err) {
+                return res.status(500).json({
+                    message: 'Internal server error'
+                });
+            }
 
-// 	 if (username === '') {
-//         return res.status(422).json({
-//             message: 'Incorrect field length: username'
-//         });
-//     }
+            var user = new User({
+            	username: username,
+            	password: hash
+            });
 
-//     if (!('password' in req.body)) {
-//         return res.status(422).json({
-//             message: 'Missing field: password'
-//         });
-//     }
+            user.save(function(err){
+            	if(err){
+            		return res.status(500).json({
+            			message: 'Internal server error'
+            		});
+            	}
 
-//     var password = req.body.password;
+            	return res.status(201).json({});
+            });
+    	});
+    });   
+});
 
-//     if (typeof password !== 'string') {
-//         return res.status(422).json({
-//             message: 'Incorrect field type: password'
-//         });
-//     }
+var strategy = new LocalStrategy({
+	usernameField: 'username',
+	passwordField: 'password'
+},function(username, password, callback) {
+	console.log(username);
+    User.findOne({
+        username: username
+    }, function (err, user) {
+        if (err) {
+            callback(err);
+            return;
+        }
 
-//     password = password.trim();
+        if (!user) {
+            return callback(null, false, {
+                message: 'Incorrect username.'
+            });
+        }
 
-//     if (password === '') {
-//         return res.status(422).json({
-//             message: 'Incorrect field length: password'
-//         });
-//     }
+        user.validatePassword(password, function(err, isValid) {
+            if (err) {
+                return callback(err);
+            }
 
-//     bcrypt.genSalt(10, function(err, salt){
-//     	if(err){
-//     		return res.status(500).json({
-//     			message: 'Internal Server error'
-//     		});
-//     	}
+            if (!isValid) {
+                return callback(null, false, {
+                    message: 'Incorrect password.'
+                });
+            }
+            return callback(null, user);
+        });
+    });
+});
 
-//     	bcrypt.hash(password, salt, function(err, hash){
-//     		if (err) {
-//                 return res.status(500).json({
-//                     message: 'Internal server error'
-//                 });
-//             }
+passport.serializeUser(function(user, done) {
+    done(null, user.id);
+});
 
-//             var user = new User({
-//             	username: username,
-//             	password: hash
-//             });
+// used to deserialize the user
+passport.deserializeUser(function(id, done) {
+    User.findById(id, function(err, user) {
+        done(err, user);
+    });
+});
 
-//             user.save(function(err){
-//             	if(err){
-//             		return res.status(500).json({
-//             			message: 'Internal server error'
-//             		});
-//             	}
+passport.use('local-signup',strategy);
+app.use(passport.initialize());
 
-//             	return res.status(201).json({});
-//             });
-//     	});
-//     });   
-// });
+app.post('/login', passport.authenticate('local-signup', {
+    successRedirect : '/', // redirect to the secure profile section
+    failureRedirect : '/login' // redirect back to the signup page if there is an error
+}));
 
-// var strategy = new LocalStrategy({
-// 	usernameField: 'username',
-// 	passwordField: 'password'
-// },function(username, password, callback) {
-// 	console.log(username);
-//     User.findOne({
-//         username: username
-//     }, function (err, user) {
-//         if (err) {
-//             callback(err);
-//             return;
-//         }
-
-//         if (!user) {
-//             return callback(null, false, {
-//                 message: 'Incorrect username.'
-//             });
-//         }
-
-//         user.validatePassword(password, function(err, isValid) {
-//             if (err) {
-//                 return callback(err);
-//             }
-
-//             if (!isValid) {
-//                 return callback(null, false, {
-//                     message: 'Incorrect password.'
-//                 });
-//             }
-//             return callback(null, user);
-//         });
-//     });
-// });
-
-// passport.serializeUser(function(user, done) {
-//     done(null, user.id);
-// });
-
-// // used to deserialize the user
-// passport.deserializeUser(function(id, done) {
-//     User.findById(id, function(err, user) {
-//         done(err, user);
-//     });
-// });
-
-// passport.use('local-signup',strategy);
-// app.use(passport.initialize());
-
-// app.post('/login', passport.authenticate('local-signup', {
-//     successRedirect : '/', // redirect to the secure profile section
-//     failureRedirect : '/login' // redirect back to the signup page if there is an error
-// }));
-
-// app.get('/login',function(req,res){
-// 	res.json({
-// 		message: 'login form here'
-// 	});
-// });
+app.get('/login',function(req,res){
+	res.json({
+		message: 'login form here'
+	});
+});
 
 
 

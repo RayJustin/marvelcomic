@@ -111,6 +111,20 @@ body {
 .character, .characterHead {
 	width: 100px;
 	height: 100px;
+	position: relative;
+}
+
+.character span {
+	display: inline-block;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    text-align: center;
+    background-color: rgba(0,0,0,0.8);
+    padding: 3px;
+    font-size: 12px;
+    letter-spacing: 1px;
 }
 
 a {
@@ -196,10 +210,6 @@ a {
 	width: 50%;
 	height: 200px;
 	margin: 0 auto;
-}
-
-.characterDetail, .seriesDetail, .comicOverview {
-	display: none;
 }
 
 .characterInfo {
@@ -320,6 +330,90 @@ h1.characterName {
 .check {
 	font-size: 30px;
 }
+
+
+/*----Contact-Styles---*/
+
+.contactContainer {
+	width: 700px;
+	height: 500px;
+	margin: 20px auto;
+	color: white;
+	text-shadow: 3px 3px #6c6c6c;
+	letter-spacing: 5px;
+	background-color:rgba(0,0,0,0.5);
+	padding: 20px;
+	text-align: center;
+}
+
+.contactContainer div {
+	margin-bottom: 10px; 
+}
+
+.contactContainer a {
+	text-decoration: underline;
+}
+
+.contactContainer a:hover {
+	text-shadow: 3px 3px red;
+}
+
+.contactContainer span {
+	font-size: 60px;
+}
+
+.contactContainer p {
+	width: 300px;
+	margin: 20px auto 0;
+	font-size: 20px;
+
+}
+
+.contactContainer img {
+	width: 100px;
+	height: 100px;
+	border-radius: 50%;
+	border: 3px solid #6c6c6c;
+}
+
+/*----Login-Styles-----*/
+
+.authContainer {
+	width: 50%;
+	height: 350px;
+	margin: 50px auto;
+	background-color:rgba(0,0,0,0.5);
+	padding: 20px;
+	color: white;
+	text-shadow: 3px 3px #6c6c6c;
+	letter-spacing: 5px;
+	vertical-align: middle;
+}
+
+.authContainer h1 {
+	color: white;
+	text-align: center;
+	text-shadow: 3px 3px #6c6c6c;
+	letter-spacing: 5px;
+}
+
+.authContainer label {
+	display: block;
+}
+
+.authContainer input {
+	margin: 5px 0;
+	letter-spacing: 2px;
+}
+
+.authContainer a {
+	text-decoration: underline;
+}
+
+.authContainer a:hover {
+	text-shadow: 3px 3px #d30000;
+}
+
 /*----Footer-Styles----*/
 
 .characterList {
