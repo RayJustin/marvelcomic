@@ -268,6 +268,30 @@ h1.characterName {
 	overflow: hidden;
 }
 
+.readButton {
+	border: 1px solid white;
+	background-color: #d30000;
+	padding: 5px;
+	letter-spacing: 2px;
+}
+
+.readButtonLrg:hover, .readButton:hover {
+	border: 1px solid yellow;
+}
+
+.readButtonLrg {
+	border: 1px solid white;
+	background-color: #d30000;
+	padding: 10px;
+	font-size: 25px;
+	display: block; 
+	width: 80px;
+	margin: 0 auto;
+	letter-spacing: 2px;
+}
+
+
+
 .comicOverview {
 	height: 600px;
 	position: absolute;
@@ -387,7 +411,7 @@ h1.characterName {
 	color: white;
 	text-shadow: 3px 3px #6c6c6c;
 	letter-spacing: 5px;
-	vertical-align: middle;
+	text-align: center;
 }
 
 .authContainer h1 {
@@ -397,17 +421,26 @@ h1.characterName {
 	letter-spacing: 5px;
 }
 
+.authContainer div {
+	float: left;
+	width: 50%;
+}
+
 .authContainer label {
 	display: block;
 }
 
 .authContainer input {
-	margin: 5px 0;
+	margin: 10px auto 20px;
 	letter-spacing: 2px;
+	padding: 5px 10px;
+	border-radius: 10px;
+	display: block;
 }
 
 .authContainer a {
 	text-decoration: underline;
+
 }
 
 .authContainer a:hover {

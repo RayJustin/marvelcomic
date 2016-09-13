@@ -12,20 +12,17 @@
         <div>
             <label for="email">Email</label>
             <input type="text" id="email" name="email">
-        </div>
-        <div>
             <label for="password">Password</label>
             <input type="password" id="password" name="password">
+            <button type="submit">Login</button>
         </div>
-
-        <button type="submit">Login</button>
     </form>
-
-    <hr>
-
-    <p>Need an account? <a href="/signup">Signup</a></p>
-    <p>Or go <a href="/">home</a>.</p>
-
+    <div>
+        <p>Need an account?</p> 
+        <a href="/signup">Signup</a>
+        <p>Can't get logged in?</p> 
+        <a href="/contact">Contact Me</a>
+    </div>
 </div>
 
 <% include includes/footer %>

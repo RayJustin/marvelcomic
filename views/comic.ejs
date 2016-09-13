@@ -18,11 +18,9 @@
 						</span>
 					</div>
 				</a>
-				<input type="checkbox" id="cb<%= [i] %>" name="cb<%= [i] %>">
-					<label for="cb<%= [i] %>">
-						Read
-					</label>
-				</input>
+				<% if(user) { %>
+					<a href="read/<%=i%>" class="readButton">Read</a>
+				<% } %>
 			</div>
 		<% } %>
 	</section>
