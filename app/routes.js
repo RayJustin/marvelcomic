@@ -2,18 +2,8 @@ var api = require('marvel-api');
 var Character = require('./models/character');
 var Series = require('./models/series');
 var Comic = require('./models/comic');
-var flash = require('connect-flash');
-var passport = require('passport');
-var cookieParser = require('cookie-parser');
-var session = require('express-session');
 
 module.exports = function(app, passport){
-
-	app.use(session({ secret: "DeadpoolIsTheGreatest"}));
-	app.use(passport.initialize());
-	app.use(passport.session());
-	app.use(flash());
-	app.use(cookieParser());
 
 	var marvel = api.createClient({
 	  publicKey: '629306f6ee3a76a9edb4bf7f908c11fe', 
@@ -22,17 +12,12 @@ module.exports = function(app, passport){
 
 	// Loads Home Page
 	app.get('/', function(req,res){
-		var logout = false;
-		if(req.user){
-			logout = true;
-		}
-
 		Character.find({show: 'Yes'}, function(err, data){
 			if(err){
 				return err;
 			}
 
-			res.render('character.ejs', {logout: logout, user: req.user, characters: data}); 
+			res.render('character.ejs', {user: req.user, characters: data}); 
 		});
 	});
 	// Loads Character Page 
@@ -172,7 +157,7 @@ module.exports = function(app, passport){
 	// Loads Login Page
 	app.get('/login', function(req, res){
 		// render login page and pass in any flash data if it exists
-		res.render('login.ejs', { message: req.flash('loginMessage') });
+		res.render('login.ejs', {user: req.user, message: req.flash('loginMessage') });
 	});
 
 	// process login form
@@ -185,7 +170,7 @@ module.exports = function(app, passport){
 
 	// signup
 	app.get('/signup', function(req, res){
-		res.render('signup.ejs', { message: req.flash('signupMessage')});
+		res.render('signup.ejs', {user: req.user, message: req.flash('signupMessage')});
 	});
 
 	// process signup form
@@ -211,7 +196,7 @@ module.exports = function(app, passport){
 
 	// Loads Contact Page 
 	app.get('/contact', function(req, res){
-		res.render('contact.ejs');
+		res.render('contact.ejs', {user: req.user});
 	});
 
 };
