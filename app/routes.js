@@ -2,6 +2,7 @@ var api = require('marvel-api');
 var Character = require('./models/character');
 var Series = require('./models/series');
 var Comic = require('./models/comic');
+var Read = require('./models/read');
 
 module.exports = function(app, passport){
 
@@ -194,6 +195,20 @@ module.exports = function(app, passport){
 	// Loads Contact Page 
 	app.get('/contact', function(req, res){
 		res.render('contact.ejs', {user: req.user});
+	});
+
+	app.get('/series/read/:id', function(req, res){
+		
+		Read.create({
+			comicID: req.params.id,
+			user: req.user._id
+		}, function(err, read){
+			if(err){
+				return res.status(500).json({
+					message: 'Error:' + err
+				});
+			}
+		});
 	});
 
 };
