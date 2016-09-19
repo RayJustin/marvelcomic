@@ -5,9 +5,10 @@ var ComicSchema = new mongoose.Schema({
 	comicID: Number,
 	thumbnail: String,
 	series: Number,
+	characters: [Number],
+	detail: String,
 	updated: {type: Date, default: Date.now},
-	show: {type: String, default: 'Yes'},
-	read: {type: String, default: 'No'}
+	show: {type: String, default: 'Yes'}
 });
 
 var Comic = mongoose.model('Comic', ComicSchema);

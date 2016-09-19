@@ -10,23 +10,34 @@
 	</section>
 	<section class="seriesSection">
 		<% for(var i = 0; i < series.length; i++) { %>
-			<div class="seriesCont">
-				<a href="/series/<%= series[i].seriesID %>">
-					<div class="series" style="background-image: url(' <%= series[i].thumbnail %> ')">
-						<span> 
-							<%= series[i].name %> 
-						</span>
-					</div>
-						<span class="progress">
-							Progress: 0/10
-						</span>
-					<div class="meter">
-						<span style="width: 0%">
-							<!-- Width Changes To Increase Progress Bar-->
-						</span>
-					</div>
-				</a>
-			</div>
+			<% for(var j = 0; j < series[i].comics.length; j++) { %>
+				<% var index = 0; %>
+				<% if(read.indexOf(series[i].comics[j]) > -1) { %>
+					<% index++ %>
+					<% console.log(index); %>
+				<% } %>
+			<% } %>
+			<% if(series[i].numOfComics > 1) { %>
+				<div class="seriesCont">
+					<a href="/series/<%= series[i].seriesID %>">
+						<div class="series" style="background-image: url(' <%= series[i].thumbnail %> ')">
+							<span> 
+								<%= series[i].name %> 
+							</span>
+						</div>
+						<% if(typeof user !== "undefined"){ %>
+							<span class="progress">
+								Progress: <%= index %>/<%= series[i].numOfComics %>
+							</span>
+						<div class="meter">
+							<span style="width: <%= index / series[i].numOfComics%>%">
+								<!-- Width Changes To Increase Progress Bar-->
+							</span>
+						</div>
+						<% } %>
+					</a>
+				</div>
+			<% } %>
 		<% } %>
 	</section>
 

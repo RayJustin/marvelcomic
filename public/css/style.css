@@ -212,6 +212,10 @@ a {
 	margin: 0 auto;
 }
 
+.detail {
+	text-align: center;
+}
+
 .characterInfo {
 	width: 50%;
 	height: 125px;
@@ -275,6 +279,10 @@ h1.characterName {
 	letter-spacing: 2px;
 }
 
+div > .read {
+	background-color: black;
+}
+
 .readButtonLrg:hover, .readButton:hover {
 	border: 1px solid yellow;
 }
@@ -306,6 +314,10 @@ h1.characterName {
 	position: relative;
 	left: 300px;
 	margin: 20px 0;
+}
+
+.comicDetail > h2 {
+	text-align: center;
 }
 
 .comicWrapper {
