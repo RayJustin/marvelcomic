@@ -5,15 +5,34 @@
 		<div class="comicLrg" style="background-image: url(' <%= comic.thumbnail %> ')">
 			
 		</div>
-		<input type="checkbox" id="cb" name="cb">
-			<label id="check" for="cb">
-				Read
-			</label>
-		</input>
+		<% if(user && read.indexOf(comic.comicID) > -1) {%>
+				<a href="/read/<%= comic.comicID %>" class="readButtonLrg read">Read</a>
+		<% } else if(user) {%>
+				<a href="/read/<%= comic.comicID %>" class="readButtonLrg">Read</a>
+		<% } %>
 	</div>
 	<div class="comicDesc">
 		<h1> <%= comic.name %> </h1>
-		<ul class="comicDetail"></ul>
+		<span class="border"></span>
+		<div class="comicDetail">
+			<% if(typeof characters !== "undefined") {%>
+				<h2>Characters</h2>
+			<% } %>
+			<div class="detail">
+				<% for(var i = 0; i < characters.length; i++) {%>
+					<% if(characters[i].show == "Yes"){ %>
+						<a href='/character/<%= characters[i].charID %>'>
+							<div class="character detailChar" style="background-image: url('<%= characters[i].thumbnail %>')">
+								<span> <%= characters[i].name %> </span>
+							</div>
+						</a>
+					<% } %>
+				<% } %>
+			</div>
+			<% if(typeof comic.detail !== "undefined") { %>
+				<a target="_blank" class="detailButton" href="<%= comic.detail %>">Details</a>
+			<% } %>
+		</div>
 	</div>
 </section>
 

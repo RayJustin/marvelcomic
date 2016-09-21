@@ -18,8 +18,10 @@
 						</span>
 					</div>
 				</a>
-				<% if(user) { %>
-					<a href="read/<%=i%>" class="read-btn">Read</a>
+				<% if(user && read.indexOf(comics[i].comicID) > -1) {%>
+						<a href="/read/<%= comics[i].comicID %>" class="readButton read">Read</a>
+				<% } else if(user) {%>
+						<a href="/read/<%= comics[i].comicID %>" class="readButton">Read</a>
 				<% } %>
 			</div>
 		<% } %>
