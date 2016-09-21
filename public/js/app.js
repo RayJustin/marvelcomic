@@ -1,5 +1,5 @@
 $(document).ready(function(){
-
+	// Just handles the style changes to the Read buttons
 	$('.comicCont').on('click', '.readButton', function(e){
   		e.preventDefault();
   		var button = $(this);

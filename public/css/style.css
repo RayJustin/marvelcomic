@@ -207,7 +207,7 @@ a {
 }
 
 .seriesInfo {
-	width: 50%;
+	max-width: 80%;
 	height: 200px;
 	margin: 0 auto;
 }
@@ -277,6 +277,7 @@ h1.characterName {
 	background-color: #d30000;
 	padding: 5px;
 	letter-spacing: 2px;
+	text-shadow: 3px 3px black;
 }
 
 div > .read {
@@ -284,11 +285,12 @@ div > .read {
 }
 
 .readButtonLrg:hover, .readButton:hover {
-	border: 1px solid yellow;
+	border: 2px solid yellow;
 }
 
 .readButtonLrg {
-	border: 1px solid white;
+	text-shadow: 3px 3px black;
+	border: 2px solid white;
 	background-color: #d30000;
 	padding: 10px;
 	font-size: 25px;
@@ -297,8 +299,6 @@ div > .read {
 	margin: 0 auto;
 	letter-spacing: 2px;
 }
-
-
 
 .comicOverview {
 	height: 600px;
@@ -310,14 +310,36 @@ div > .read {
 	letter-spacing: 5px;
 	font-size: 20px;
 	color: white;
-	text-shadow: 5px 5px black;
+	text-shadow: 3px 3px black;
 	position: relative;
 	left: 300px;
 	margin: 20px 0;
 }
 
+.comicDesc > h1 {
+	width: 700px;
+	text-align: center;
+}
+
 .comicDetail > h2 {
 	text-align: center;
+}
+
+.detailButton {
+	display: block;
+	width: 110px;
+	padding: 10px;
+	border: solid 2px white;
+	color: white;
+	background-color: #d30000;
+	text-decoration: none;
+	border-radius: 10px;
+	margin: 20px auto;
+	text-shadow: 3px 3px black;
+}
+
+.detailButton:hover {
+	border: 2px solid yellow;
 }
 
 .comicWrapper {

@@ -26,7 +26,17 @@ module.exports = function(app, passport){
 		var series = [];
 		var readArr = [];
 		if(typeof req.user !== "undefined"){
-			var userID = req.user._id;
+			
+			Read.find({user: req.user._id}, function(err2, data2){
+				if(err2){
+					return err2;
+				}
+				if(typeof data2[0] !== "undefined"){
+					for (var i = 0; i < data2.length; i++) {
+						readArr.push(parseInt(data2[i].comicID));
+					}
+				}
+			});
 		}
 		// Callback allows all the database calls to finish before rendering the page
 		var cb = function(char, seriesItem){
@@ -36,24 +46,6 @@ module.exports = function(app, passport){
 				if(err){
 					return err;
 				}
-				if(typeof userID !== "undefined" && typeof data[0] !== "undefined"){
-			
-					for(var i = 0; i < data[0].comics.length; i++){
-						Read.find({user: userID, comicID: parseInt(data[0].comics[i])}, function(err2, data2){
-							if(err2){
-								return err2;
-							}
-							if(typeof data2[0] !== "undefined"){
-								readArr.push(data2[0].comicID);
-								// console.log("READARR:", readArr);
-							}
-							else {
-								return;
-							}
-						});
-					}
-				}
-				
 				if(typeof data[0] === "undefined"){
 					
 					marvel.series.find(seriesItem, function(err2, results){
@@ -72,7 +64,7 @@ module.exports = function(app, passport){
 							seriesID: results.data[0].id,
 							thumbnail: results.data[0].thumbnail.path + '.' + results.data[0].thumbnail.extension,
 							numOfComics: results.data[0].comics.available,
-							comics: comicList,
+							comics: comicList
 				  		}
 
 						Series.create(data2[0],function(err3, series){
@@ -81,7 +73,15 @@ module.exports = function(app, passport){
 									message: 'Error'+ err
 								});
 							}
+							// TJ needs to help me with this, no idea what were gonna do here...
+							marvel.series.comics(results.data[0].id, 20, 0, function(err, seriesResults){
+								if(err){
+									return err;
+								}
+								// console.log(seriesResults);
+							});
 						});
+
 						series.push(data2[0]);
 						if(series.length == character.series.length){
 							res.render('series.ejs', {user: req.user, character: character, series: series, read: readArr}); 
@@ -130,7 +130,6 @@ module.exports = function(app, passport){
 					}
 				});
 			}
-			
 
 			Comic.find({comicID: comicID}, function(err2, data2){
 

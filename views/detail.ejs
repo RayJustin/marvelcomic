@@ -15,7 +15,9 @@
 		<h1> <%= comic.name %> </h1>
 		<span class="border"></span>
 		<div class="comicDetail">
-			<h2>Characters</h2>
+			<% if(typeof characters !== "undefined") {%>
+				<h2>Characters</h2>
+			<% } %>
 			<div class="detail">
 				<% for(var i = 0; i < characters.length; i++) {%>
 					<% if(characters[i].show == "Yes"){ %>
@@ -27,6 +29,9 @@
 					<% } %>
 				<% } %>
 			</div>
+			<% if(typeof comic.detail !== "undefined") { %>
+				<a target="_blank" class="detailButton" href="<%= comic.detail %>">Details</a>
+			<% } %>
 		</div>
 	</div>
 </section>

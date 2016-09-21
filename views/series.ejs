@@ -10,11 +10,10 @@
 	</section>
 	<section class="seriesSection">
 		<% for(var i = 0; i < series.length; i++) { %>
+		<% var index = 0; %>
 			<% for(var j = 0; j < series[i].comics.length; j++) { %>
-				<% var index = 0; %>
-				<% if(read.indexOf(series[i].comics[j]) > -1) { %>
+				<% if(read.indexOf(parseInt(series[i].comics[j])) > -1) { %>
 					<% index++ %>
-					<% console.log(index); %>
 				<% } %>
 			<% } %>
 			<% if(series[i].numOfComics > 1) { %>
@@ -30,7 +29,7 @@
 								Progress: <%= index %>/<%= series[i].numOfComics %>
 							</span>
 						<div class="meter">
-							<span style="width: <%= index / series[i].numOfComics%>%">
+							<span style="width: <%= (index / series[i].numOfComics)* 100%>%">
 								<!-- Width Changes To Increase Progress Bar-->
 							</span>
 						</div>
