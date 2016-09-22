@@ -302,7 +302,7 @@ div > .read {
 
 .comicOverview {
 	height: 600px;
-	position: absolute;
+	/*position: absolute;*/
 }
 
 .comicDesc {

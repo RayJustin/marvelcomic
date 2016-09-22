@@ -6,6 +6,7 @@
 		<h1 class="characterName">
 			<%= character.name %>
 		</h1>
+		<a href="/" class="backbutton">Character Select</a>
 		<span class="border"></span>
 	</section>
 	<section class="seriesSection">
@@ -18,7 +19,7 @@
 			<% } %>
 			<% if(series[i].numOfComics > 1) { %>
 				<div class="seriesCont">
-					<a href="/series/<%= series[i].seriesID %>">
+					<a href="/series/<%= series[i].seriesID %>/<%= character.charID %>">
 						<div class="series" style="background-image: url(' <%= series[i].thumbnail %> ')">
 							<span> 
 								<%= series[i].name %> 
@@ -26,10 +27,10 @@
 						</div>
 						<% if(typeof user !== "undefined"){ %>
 							<span class="progress">
-								Progress: <%= index %>/<%= series[i].numOfComics %>
+								Progress: <%= index %>/<%= series[i].comics.length %>
 							</span>
 						<div class="meter">
-							<span style="width: <%= (index / series[i].numOfComics)* 100%>%">
+							<span style="width: <%= (index / series[i].comics.length)* 100%>%">
 								<!-- Width Changes To Increase Progress Bar-->
 							</span>
 						</div>

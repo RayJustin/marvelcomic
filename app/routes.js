@@ -65,7 +65,7 @@ module.exports = function(app, passport){
 							thumbnail: results.data[0].thumbnail.path + '.' + results.data[0].thumbnail.extension,
 							numOfComics: results.data[0].comics.available,
 							comics: comicList
-				  		}
+				  		};
 
 						Series.create(data2[0],function(err3, series){
 							if(err3){
@@ -73,13 +73,6 @@ module.exports = function(app, passport){
 									message: 'Error'+ err
 								});
 							}
-							// TJ needs to help me with this, no idea what were gonna do here...
-							marvel.series.comics(results.data[0].id, 20, 0, function(err, seriesResults){
-								if(err){
-									return err;
-								}
-								// console.log(seriesResults);
-							});
 						});
 
 						series.push(data2[0]);
@@ -90,13 +83,14 @@ module.exports = function(app, passport){
 				}
 					else {
 						series.push(data[0]);
+						// checkComicCount(data[0]);
 						if(series.length == character.series.length){
 							res.render('series.ejs', {user: req.user, character: character, series: series, read: readArr}); 
 							next();
 					}
 				}
 			});
-		}
+		};
 
 		Character.find({charID: req.params.id}, function(err, data){
 			if(err){
@@ -109,11 +103,82 @@ module.exports = function(app, passport){
 		});
 	});
 
+	function checkComicCount(series){
+		var offset = 0;
+		var limit = 20;
+		var numPages = Math.ceil(series.numOfComics/limit); //22.05 -> 23
+		
+		if(series.comics.length < series.numOfComics){
+			for (var i = 1; i < numPages; i++) {
+				// when we start we already have the first 20 comics of the series
+				// so we are starting w/ page 2 (offset 20)
+				// on the next loop 20 * 2 = 40
+				// 22 * 20 = 440
+				offset = limit * i;
+				marvel.series.comics(series.seriesID,limit,offset)
+				  .then(cb)
+				  .fail(console.error)
+				  .done();
+				// marvel.series.comics(series.seriesID, limit, offset, cb());	
+			}
+		}
+
+		function cb(res){
+
+			console.log(res.data[0].series);
+
+			for (var i = 0; i < res.data.length; i++) {
+				series.comics.push(createComicFromAPI(res.data[i],series.seriesID));
+			}
+
+			if(series.comics.length == series.numOfComics){
+				Series.update({seriesID: series.seriesID, comics: series.comics}, function(err,series){
+					console.log('series updated');
+				});
+			}
+		}
+	}
+
+	function createComicFromAPI(comic,seriesID){
+		var chars = [];
+
+		for(var i = 0; i < comic.characters.items.length; i++){
+			var charID = comic.characters.items[i].resourceURI.split('characters/');
+			chars.push(parseInt(charID[1]));
+		}
+		var detailUrl = "";
+		for (var j = 0; j < comic.urls.length; j++) {
+			if(comic.urls[j].type == "detail"){
+				detailUrl = comic.urls[j].url;
+			}
+		}
+  		var data3 = [];
+  		data3[0] = {
+  			name: comic.title,
+  			comicID: parseInt(comic.id),
+  			thumbnail: comic.thumbnail.path + '.' + comic.thumbnail.extension,
+  			series: parseInt(seriesID),
+  			characters: chars,
+  			detail: detailUrl
+  		};
+
+		Comic.create(data3[0],function(err, series){
+			if(err){
+				return res.status(500).json({
+					message: 'Error'+ err
+				});
+			}
+		});
+
+		return data3[0].comicID;
+	}
+
 	// Loads Series Page
-	app.get('/series/:id', function(req, res){
+	app.get('/series/:id/:charid', function(req, res){
 		var series;
 		var comics = [];
 		var read = [];
+		var character = req.params.charid;
 		if(typeof req.user !== "undefined"){
 			var userID = req.user._id;
 		}
@@ -138,50 +203,21 @@ module.exports = function(app, passport){
 						if (err3) {
 						    return console.error(JSON.stringify(err3));
 						}
-						var chars = [];
-
-						for(var i = 0; i < results.data[0].characters.items.length; i++){
-							var charID = results.data[0].characters.items[i].resourceURI.split('characters/');
-							chars.push(parseInt(charID[1]));
-						}
-						var detailUrl = "";
-						for (var i = 0; i < results.data[0].urls.length; i++) {
-							if(results.data[0].urls[i].type == "detail"){
-								detailUrl = results.data[0].urls[i].url;
-							}
-						}
-				  		var data3 = [];
-				  		data3[0] = {
-				  			name: results.data[0].title,
-				  			comicID: results.data[0].id,
-				  			thumbnail: results.data[0].thumbnail.path + '.' + results.data[0].thumbnail.extension,
-				  			series: req.params.id,
-				  			characters: chars,
-				  			detail: detailUrl
-				  		}
-
-						Comic.create(data3[0],function(err, series){
-							if(err){
-								return res.status(500).json({
-									message: 'Error'+ err
-								});
-							}
-						});
-
-						comics.push(data3[0]);
+						
+						comics.push(createComicFromAPI(results.data[0],s.seriesID));
 						if(comics.length == series.comics.length){
-							res.render('comic.ejs', {user: req.user, comics: comics, series: series, read: read}); 
+							res.render('comic.ejs', {user: req.user, comics: comics, series: series, read: read, character: character}); 
 						}
 					});
 				}
 				else{
 					comics.push(data2[0]);
 					if(comics.length == series.comics.length){
-						res.render('comic.ejs', {user: req.user, comics: comics, series: series, read: read}); 
+						res.render('comic.ejs', {user: req.user, comics: comics, series: series, read: read, character: character}); 
 					}
 				}
 			});
-		}
+		};
 
 		Series.find({seriesID: req.params.id}, function(err, data){
 			if(err){
@@ -228,7 +264,7 @@ module.exports = function(app, passport){
 					res.render('detail.ejs', {user: req.user, comic: comic, characters: characters, read: readArr}); 
 				}
 			});
-		}	
+		};	
 	});
 
 	// Login
