@@ -94,13 +94,13 @@ body {
 /*----Body-Styles----*/
 
 .characterCont, .comicCont, .seriesSection {
-	max-width: 900px;
+	max-width: 980px;
 	min-height: 260px;
 	margin: 20px auto;
 	text-align: center;
 }
 
-.character, .characterHead , .series, .footerCharacter, .seriesSm {
+.characterHead , .series, .footerCharacter, .seriesSm {
 	background-color: black;
 	background-size: cover;
 	display: inline-block;
@@ -108,7 +108,18 @@ body {
 	margin: 10px 20px;
 }
 
-.character, .characterHead {
+.character {
+	background-color: black;
+	background-size: cover;
+	display: inline-block;
+	border: 3px solid white;
+	margin: 3px 3px;
+	width: 130px;
+	height: 130px;
+	position: relative;
+}
+
+.characterHead {
 	width: 100px;
 	height: 100px;
 	position: relative;
@@ -125,11 +136,6 @@ body {
     padding: 3px;
     font-size: 12px;
     letter-spacing: 1px;
-}
-
-a {
-	width: inherit;
-	height: inherit;
 }
 
 .series {
@@ -210,6 +216,7 @@ a {
 	max-width: 80%;
 	height: 200px;
 	margin: 0 auto;
+	text-align: center;
 }
 
 .detail {
@@ -278,6 +285,17 @@ h1.characterName {
 	padding: 5px;
 	letter-spacing: 2px;
 	text-shadow: 3px 3px black;
+}
+
+.backButton {
+	display: block;
+    margin: 10px auto;
+    width: 125px;
+    text-shadow: 5px 5px black;
+}
+
+.backButton:hover {
+	color: #d30000;
 }
 
 div > .read {
