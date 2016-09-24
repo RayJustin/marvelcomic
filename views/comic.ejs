@@ -12,11 +12,12 @@
 	<section class="comicCont">
 		<% for(var i = 0; i < comics.length; i++) { %>
 			<div class="comicWrapper">
-				<a href="/comic/<%= comics[i].comicID %>">
+				<a target="_blank" href="<%= comics[i].detail %>">
 					<div class="comic" style="background-image: url('<%= comics[i].thumbnail %>')">
-						<span> 
+						<span class="comicName"> 
 							<%= comics[i].name %>
 						</span>
+						<span class="comicRedirect">Redirect to Marvel?</span>
 					</div>
 				</a>
 				<% if(user && read.indexOf(comics[i].comicID) > -1) {%>

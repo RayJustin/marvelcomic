@@ -83,7 +83,6 @@ module.exports = function(app, passport){
 				}
 					else {
 						series.push(data[0]);
-						// checkComicCount(data[0]);
 						if(series.length == character.series.length){
 							res.render('series.ejs', {user: req.user, character: character, series: series, read: readArr}); 
 							next();
@@ -110,16 +109,11 @@ module.exports = function(app, passport){
 		
 		if(series.comics.length < series.numOfComics){
 			for (var i = 1; i < numPages; i++) {
-				// when we start we already have the first 20 comics of the series
-				// so we are starting w/ page 2 (offset 20)
-				// on the next loop 20 * 2 = 40
-				// 22 * 20 = 440
 				offset = limit * i;
 				marvel.series.comics(series.seriesID,limit,offset)
 				  .then(cb)
 				  .fail(console.error)
 				  .done();
-				// marvel.series.comics(series.seriesID, limit, offset, cb());	
 			}
 		}
 
@@ -229,43 +223,37 @@ module.exports = function(app, passport){
 		});
 	});
 
-	// Loads Comic Page
-	app.get('/comic/:id', function(req, res){
-		var readArr = [];
-		var characters = [];
-		if(typeof req.user !== "undefined"){
-				Read.find({user: req.user._id, comicID: req.params.id}, function(err, data){
-					if(typeof data[0] !== "undefined"){
-						readArr.push(parseInt(data[0].comicID));
-					}
-					// else{
-					// 	return;
-					// }
-				});
-			}
-
-		Comic.find({comicID: req.params.id}, function(err, data){
-			if(err){
-				return err;
-			}
-			for(var i = 0; i < data[0].characters.length; i++){
-				characterFind(data[0].characters[i], i, data[0]);
-			}
-		});
-
-		var characterFind = function(id, i, comic){
-			Character.find({charID: id}, function(err, data2){
-				if(err){
-					return err;
+		app.get('/read/:id', function(req, res){
+			
+			Read.find({comicID: req.params.id, user: req.user._id}, function(err, data){
+				// Check to see if anything was found
+				if(typeof data[0] === 'undefined'){
+					// If not, create a document 
+					Read.create({
+						comicID: req.params.id,
+						user: req.user._id
+						}, function(err, read){
+						if(err){
+							return res.status(500).json({
+								message: 'Error:' + err
+							});
+						}
+						return res.status(200).end();
+					});
 				}
-				characters.push(data2[0]);
-
-				if(i == comic.characters.length - 1){
-					res.render('detail.ejs', {user: req.user, comic: comic, characters: characters, read: readArr}); 
+				else{
+					// If yes, remove the returned document
+					Read.findOneAndRemove({comicID: req.params.id, user: req.user._id}, function(err, read){
+						if(err){
+							return res.status(500).json({
+								message: 'Error:' + err
+							});
+						}
+						return res.status(200).end();
+					});
 				}
 			});
-		};	
-	});
+		});
 
 	// Login
 	app.get('/login', function(req, res){
@@ -308,40 +296,7 @@ module.exports = function(app, passport){
 	app.get('/contact', function(req, res){
 		res.render('contact.ejs', {user: req.user});
 	});
-
-	app.get('/read/:id', function(req, res){
-		
-		Read.find({comicID: req.params.id, user: req.user._id}, function(err, data){
-			// Check to see if anything was found
-			if(typeof data[0] === 'undefined'){
-				// If not, create a document 
-				Read.create({
-					comicID: req.params.id,
-					user: req.user._id
-					}, function(err, read){
-					if(err){
-						return res.status(500).json({
-							message: 'Error:' + err
-						});
-					}
-					return res.status(200).end();
-				});
-			}
-			else{
-				// If yes, remove the returned document
-				Read.findOneAndRemove({comicID: req.params.id, user: req.user._id}, function(err, read){
-					if(err){
-						return res.status(500).json({
-							message: 'Error:' + err
-						});
-					}
-					return res.status(200).end();
-				});
-			}
-		});
-	});
 };
-
 function isLoggedIn(req, res, next){
 	if(req.isAuthenticated())
 		return next();

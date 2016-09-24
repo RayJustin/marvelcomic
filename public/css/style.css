@@ -159,7 +159,7 @@ body {
     letter-spacing: 2px;
 }
 
-.comic > span {
+.comic > .comicName {
 	display: inline-block;
     position: absolute;
     bottom: 0;
@@ -168,6 +168,34 @@ body {
     text-align: center;
     background-color: rgba(0,0,0,0.8);
     padding: 10px;
+}
+
+.comicRedirect {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    text-align: center;
+    background-color: rgba(0,0,0,0.8);
+    padding: 10px;
+    display: none;
+    color: #eceaea;
+    font-size: 20px;
+}
+
+.comicWrapper {
+	height: 275px;
+	width: 180px;
+	display: inline-block;
+	margin: 10px 15px;
+}
+
+.comic:hover > .comicName {
+	top: 0;
+}
+
+.comic:hover .comicRedirect {
+	display: inline-block;
 }
 
 .series:hover, .comic:hover, .character:hover {
@@ -219,13 +247,11 @@ body {
 	text-align: center;
 }
 
-.detail {
-	text-align: center;
-}
 
 .characterInfo {
+	text-align: center;
 	width: 50%;
-	height: 125px;
+	height: 175px;
 	margin: 0 auto;
 	white-space: nowrap;
 }
@@ -317,96 +343,6 @@ div > .read {
 	margin: 0 auto;
 	letter-spacing: 2px;
 }
-
-.comicOverview {
-	height: 600px;
-	/*position: absolute;*/
-}
-
-.comicDesc {
-	display: inline-block;
-	letter-spacing: 5px;
-	font-size: 20px;
-	color: white;
-	text-shadow: 3px 3px black;
-	position: relative;
-	left: 300px;
-	margin: 20px 0;
-}
-
-.comicDesc > h1 {
-	width: 700px;
-	text-align: center;
-}
-
-.comicDetail > h2 {
-	text-align: center;
-}
-
-.detailButton {
-	display: block;
-	width: 110px;
-	padding: 10px;
-	border: solid 2px white;
-	color: white;
-	background-color: #d30000;
-	text-decoration: none;
-	border-radius: 10px;
-	margin: 20px auto;
-	text-shadow: 3px 3px black;
-}
-
-.detailButton:hover {
-	border: 2px solid yellow;
-}
-
-.comicWrapper {
-	height: 275px;
-	width: 180px;
-	display: inline-block;
-	margin: 10px 15px;
-}
-
-.comicContainer {
-	float: left;
-	display: inline-block;
-	position: relative;
-	left: 200px;
-	margin: 50px auto;
-	text-align: center;
-}
-
-.comicLrg {
-	height: 350px;
-	width: 225px;
-	background-color: black;
-	background-size: cover;
-	border: 3px solid white;
-	margin: 10px 0;
-}
-
-.checked {
-	border: 1px solid green;
-}
-
-.uncheckBox {
-	background-image: url('images/unchecked.ico');
-	background-size: cover;
-	width: 10px;
-	height: 10px;
-}
-
-.checkBox {
-	background-image: url('images/checked.ico');
-	background-size: cover;
-	width: 10px;
-	height: 10px;
-}
-
-.check {
-	font-size: 30px;
-}
-
 
 /*----Contact-Styles---*/
 
