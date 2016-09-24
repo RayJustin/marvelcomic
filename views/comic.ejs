@@ -1,7 +1,7 @@
 <% include includes/header %>
 
 	<section class="seriesInfo">
-		<div class="seriesSm" style="background-image: url(' <%= series.thumbnail %> ')">
+		<div class="seriesSm" style="background-image: url(' <%= series.thumbnail.replace("http://", "https://"); %> ')">
 		</div>
 		<h1 class="seriesName">
 			<%= series.name %>
@@ -13,7 +13,7 @@
 		<% for(var i = 0; i < comics.length; i++) { %>
 			<div class="comicWrapper">
 				<a target="_blank" href="<%= comics[i].detail %>">
-					<div class="comic" style="background-image: url('<%= comics[i].thumbnail %>')">
+					<div class="comic" style="background-image: url('<%= comics[i].thumbnail.replace("http://", "https://"); %>')">
 						<span class="comicName"> 
 							<%= comics[i].name %>
 						</span>

@@ -3,7 +3,7 @@
 <section class="characterCont">
 	<% for(var i = 0; i < characters.length; i++) { %>
 		<a href='/character/<%= characters[i].charID %>'>
-			<div class="character" style="background-image: url('<%= characters[i].thumbnail %>')">
+			<div class="character" style="background-image: url('<%= characters[i].thumbnail.replace("http://", "https://"); %>')">
 				<span> <%= characters[i].name %> </span>
 			</div>
 		</a>

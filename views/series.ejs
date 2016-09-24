@@ -2,7 +2,7 @@
 
 
 	<section class="characterInfo">
-		<div class="characterHead" style="background-image: url(' <%= character.thumbnail %> ')"></div>
+		<div class="characterHead" style="background-image: url(' <%= character.thumbnail.replace("http://", "https://"); %> ')"></div>
 		<h1 class="characterName">
 			<%= character.name %>
 		</h1>
@@ -20,7 +20,7 @@
 			<% if(series[i].numOfComics > 1) { %>
 				<div class="seriesCont">
 					<a href="/series/<%= series[i].seriesID %>/<%= character.charID %>">
-						<div class="series" style="background-image: url(' <%= series[i].thumbnail %> ')">
+						<div class="series" style="background-image: url(' <%= series[i].thumbnail.replace("http://", "https://"); %> ')">
 							<span> 
 								<%= series[i].name %> 
 							</span>
